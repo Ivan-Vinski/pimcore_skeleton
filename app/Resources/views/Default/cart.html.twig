@@ -1,0 +1,20 @@
+<h1>My cart</h1>
+
+{% for cartItem in cart.items %}
+    {% set price = cartItem.product.osPrice %}
+    ---------------------------------------------------------------------------------
+
+    <p>{{ cartItem.product.name }}</p>
+    <p>Net price: {{ price.getCurrency.toCurrency(price.getNetAmount) }}</p>
+    <p>Amount: {{ cartItem.count() }}</p>
+
+    {% for taxEntry in price.getTaxEntries() %}
+        <p>{{ taxEntry.taxId }} : {{ price.getCurrency.toCurrency(taxEntry.getAmount)  }}</p>
+    {% endfor %}
+    <p>Total: {{ price.getCurrency.toCurrency(price.getGrossAmount) }}</p>
+
+{% endfor %}
+
+---------------------------------------------------------------------------------
+<h1>Total: {{ cart.getPriceCalculator().getGrandTotal() }}</h1>
+<button type="button" onclick="window.location.href='http://skeleton.loc/checkout';">Checkout</button>

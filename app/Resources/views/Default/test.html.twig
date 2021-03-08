@@ -1,0 +1,36 @@
+
+<form>
+    {% if(filterDefinition.filters|length > 0) %}
+        {% for filter in filterDefinition.filters %}
+            {% set filterMarkup = filterService.filterFrontend(filter, listing, currentFilter) %}
+            {{ filterMarkup | raw  }}
+        {% endfor %}
+    {% endif %}
+
+    <input type="submit" value="Apply filter">
+</form>
+
+<form>
+
+    {% for item in results %}
+        <br>
+        ---------------------------------------------------------------------------------
+        {% set price = item.getOsPrice %}
+
+        <p>{{ item.name }}</p>
+        <p>Net price: {{ price.getCurrency.toCurrency(price.getNetAmount) }}</p>
+
+        {% for taxEntry in price.getTaxEntries() %}
+             <p>{{ taxEntry.taxId }} : {{ price.getCurrency.toCurrency(taxEntry.getAmount) }}</p>
+        {% endfor %}
+
+        <p>Total: {{ price.getCurrency.toCurrency(price.getGrossAmount) }}</p>
+
+        <button type="button" onclick="window.location.href='http://skeleton.loc/add-to-cart?id={{ item.id }}';">Add to cart</button>
+
+    {% endfor %}
+
+</form>
+
+
+

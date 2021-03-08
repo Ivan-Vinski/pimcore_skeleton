@@ -1,0 +1,35 @@
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    {{ form_label(form.firstname) }}
+    {{ form_widget(form.firstname) }}
+<br><br>
+    {{ form_label(form.lastname) }}
+    {{ form_widget(form.lastname) }}
+<br><br>
+    {{ form_label(form.email) }}
+    {{ form_widget(form.email) }}
+<br><br>
+    {{ form_label(form.street) }}
+    {{ form_widget(form.street) }}
+<br><br>
+    {{ form_label(form.city) }}
+    {{ form_widget(form.city) }}
+<br><br>
+    {{ form_label(form.zip) }}
+    {{ form_widget(form.zip) }}
+<br><br>
+    {{ form_label(form.country_code) }}
+    {{ form_widget(form.country_code) }}
+<br><br>
+    {{ form_errors(form.password.first) }}
+    {{ form_label(form.password.first) }}
+    {{ form_widget(form.password.first) }}
+<br><br>
+    {{ form_label(form.password.second) }}
+    {{ form_widget(form.password.second) }}
+<br><br>
+    {{ form_label(form.submit) }}
+    {{ form_widget(form.submit) }}
+
+{{ form_end(form) }}

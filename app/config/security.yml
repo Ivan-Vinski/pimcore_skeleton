@@ -1,0 +1,44 @@
+pimcore:
+    security:
+        # the encoder factory as shipped by the CMF
+        encoder_factories:
+            Pimcore\Model\DataObject\Customer: cmf.security.user_password_encoder_factory
+
+
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/security.html
+security:
+    providers:
+        # we use a custom user provider which loads users from the Customer class
+        # the user provider is provided by the CMF
+        cmf_customer_provider:
+            id: cmf.security.user_provider #cmf.security.user_provider.oauth
+
+
+
+    firewalls:
+        main:
+            anonymous: true
+#            lazy: true
+            provider: cmf_customer_provider
+
+            guard:
+                authenticators:
+                    - AppBundle\Security\LoginFormAuthenticator
+
+
+
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                csrf_token_generator: security.csrf.token_manager
+                default_target_path: app_dashboard
+            logout:
+                path: app_logout
+                target: app_login
+
+            logout_on_user_change: true
+
+            remember_me:
+                secret: '%kernel.secret%'
+                path: /

@@ -1,0 +1,103 @@
+pimcore_ecommerce_framework:
+    index_service:
+        tenants:
+            default:
+                config_id: Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\Config\DefaultMysql
+                search_attributes:
+                    - name
+                    - manufacturer_name
+                attributes:
+                    name:
+                        fieldname: name
+                        type: varchar(190)
+                        filter_group: string
+                    manufacturer_name:
+                        fieldname: 'manufacturer'
+                        type: varchar(255)
+                        interpreter_id: Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\ObjectValue
+                        interpreter_options:
+                            target:
+                                fieldname: name
+                                locale: ''
+                        filter_group: string
+                    manufacturer:
+                        interpreter_id: Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\DefaultObjects
+                        filter_group: relation
+                    manufacturer_group:
+                        fieldname: 'manufacturer'
+                        type: varchar(255)
+                        interpreter_id: AppBundle\Interpreter\ManufacturerGroup
+
+
+
+#                    manufacturer_group_name:
+#                        fieldname: 'manufacturer'
+#                        interpreter_id: Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\Interpreter\ObjectValue
+#                        interpreter_options:
+#                            target:
+#                                fieldname: name
+#                                locale: ''
+#                        filter_group: string
+
+
+
+
+    filter_service:
+        tenants:
+            default:
+                filter_types:
+                    FilterRelation:
+                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\SelectRelation
+                        template: ':Shop/filters:object_relation.html.twig'
+                        #template: 'Default/test.html.twig'
+
+
+    price_systems:
+        default:
+            id: app.default_price_system
+
+    cart_manager:
+        tenants:
+            _defaults:
+                cart_manager_id: Pimcore\Bundle\EcommerceFrameworkBundle\MultiCartManager
+                cart:
+                    # service ID of a cart factory which creates individual carts at runtime
+                    factory_id: Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\CartFactory
+
+                    factory_options:
+                        cart_class_name: Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\Cart
+                        guest_cart_class_name: Pimcore\Bundle\EcommerceFrameworkBundle\CartManager\SessionCart
+                        cart_readonly_mode: deactivated
+
+    checkout_manager:
+        tenants:
+            _defaults:
+                # the following two values are default values an can be omitted
+                # service ID of a checkout manager factory which builds cart specific checkout managers
+                factory_id: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\CheckoutManagerFactory
+
+                # options passed to the factory - available options vary by implementation
+                factory_options:
+                    class: \Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CheckoutManager
+                    handle_pending_payments_strategy: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\HandlePendingPayments\CancelPaymentOrRecreateOrderStrategy
+
+                # commit order processor
+                commit_order_processor:
+                    # order processor service ID
+                    id: Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\V7\CommitOrderProcessor
+
+                    # options passed to the commit order processor - available options vary by implementation
+                    options:
+                        confirmation_mail: /en/emails/order-confirmation
+
+                # define different checkout steps which need to be committed before commit of order is possible
+                steps:
+                    deliveryaddress:
+                        class: \Pimcore\Bundle\EcommerceFrameworkBundle\CheckoutManager\DeliveryAddress
+
+
+            default:
+                # define payment provider which should be used for payment.
+                # payment providers are defined in payment_manager section.
+#                payment:
+#                    provider: paypal

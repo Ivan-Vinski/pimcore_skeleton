@@ -1,0 +1,14 @@
+<h1> object relation filter </h1>
+
+
+
+{% for manufacturer in objects %}
+    <label> {{ manufacturer.name }}
+    <input type="radio" id="{{ manufacturer.id }}" name="{{ fieldname }}" value="{{ manufacturer.id }}">
+    </label>
+    <br>
+
+{% endfor %}
+
+
+
